@@ -3,183 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Access Portal</title>
+    <title>Access Verification</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-color: white;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
-            overflow: hidden;
+            color: #333;
+            text-align: center;
+            padding: 20px;
         }
         
         .container {
-            max-width: 800px;
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
         h1 {
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-            background: linear-gradient(to right, #ff8a00, #da1b60);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            color: #2c3e50;
         }
         
         p {
-            margin-bottom: 30px;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #e0e0e0;
-        }
-        
-        .status {
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        
-        .verifying {
-            background: rgba(255, 193, 7, 0.2);
-            border-left: 5px solid #ffc107;
-        }
-        
-        .success {
-            background: rgba(40, 167, 69, 0.2);
-            border-left: 5px solid #28a745;
-        }
-        
-        .warning {
-            background: rgba(220, 53, 69, 0.2);
-            border-left: 5px solid #dc3545;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            color: #7f8c8d;
         }
         
         .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(52, 152, 219, 0.3);
             border-radius: 50%;
-            border-top-color: #fff;
+            border-top-color: #3498db;
             animation: spin 1s ease-in-out infinite;
-            margin: 20px auto;
+            margin: 10px auto;
         }
         
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         
-        .hidden {
-            display: none;
-        }
-        
-        .button {
-            display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(to right, #ff8a00, #da1b60);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            margin-top: 20px;
-        }
-        
-        .button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        
-        .security-badge {
-            margin-top: 30px;
+        .status {
             padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
             font-size: 0.9rem;
         }
         
-        .feature-list {
-            display: flex;
-            justify-content: space-around;
-            margin: 30px 0;
-            flex-wrap: wrap;
+        .verifying {
+            background-color: #f8f9fa;
+            color: #6c757d;
         }
         
-        .feature {
-            flex: 1;
-            min-width: 200px;
-            padding: 15px;
-            margin: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
         
-        .feature i {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            display: block;
-            color: #ff8a00;
+        .warning {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Secure Access Portal</h1>
-        <p>Advanced protection system ensuring secure access to resources</p>
-        
-        <div class="feature-list">
-            <div class="feature">
-                <i>🔒</i>
-                <h3>Encrypted Connection</h3>
-                <p>All data is transmitted through secure channels</p>
-            </div>
-            <div class="feature">
-                <i>🛡️</i>
-                <h3>Threat Protection</h3>
-                <p>Real-time monitoring for malicious activity</p>
-            </div>
-            <div class="feature">
-                <i>⚡</i>
-                <h3>Fast Verification</h3>
-                <p>Quick authentication without compromising security</p>
-            </div>
-        </div>
+        <h1>Verifying Access</h1>
+        <p>Please wait while we verify your request. This should only take a moment.</p>
         
         <div id="statusVerifying" class="status verifying">
             <div class="loader"></div>
-            <p>Verifying your request... Please wait</p>
+            <p>Checking security parameters...</p>
         </div>
         
         <div id="statusSuccess" class="status success hidden">
-            <p>✓ Verification successful! Redirecting to secure destination...</p>
+            <p>✓ Access granted. Redirecting...</p>
         </div>
         
         <div id="statusWarning" class="status warning hidden">
-            <p>⚠ Suspicious activity detected. Security protocols activated.</p>
-        </div>
-        
-        <div class="security-badge">
-            <p>Protected by Advanced Threat Detection System v2.5</p>
+            <p>⚠ Security check in progress...</p>
         </div>
     </div>
 
@@ -193,6 +114,9 @@
         
         <!-- CSS-based bot trap -->
         <div id="cssTrap" style="opacity:0;position:absolute;left:-10000px;"></div>
+        
+        <!-- JavaScript challenge -->
+        <div id="jsChallenge"></div>
     </div>
 
     <script>
@@ -268,19 +192,28 @@
                 return iframe.contentWindow === null || iframe.contentDocument === null;
             },
             
-            // CSS-based trap (bots might interact with hidden elements)
-            checkCSSTrap: function() {
-                const trap = document.getElementById('cssTrap');
-                trap.addEventListener('click', () => true);
-                trap.addEventListener('focus', () => true);
+            // JavaScript challenge (bots might not execute complex JS properly)
+            checkJSChallenge: function() {
+                const challenge = document.getElementById('jsChallenge');
+                let passed = false;
                 
-                // Simulate a focus event to see if it gets triggered
+                // Create a complex JavaScript challenge
                 try {
-                    trap.focus();
-                } catch(e) {}
+                    // Test for proper Function constructor behavior
+                    const testFunc = new Function('a', 'b', 'return a + b;');
+                    if (testFunc(5, 10) !== 15) return false;
+                    
+                    // Test for proper array methods
+                    const arr = [1, 2, 3, 4, 5];
+                    const result = arr.map(x => x * 2).filter(x => x > 5).reduce((a, b) => a + b, 0);
+                    if (result !== 24) return false;
+                    
+                    passed = true;
+                } catch(e) {
+                    return false;
+                }
                 
-                // Return true if any events were triggered (indicating bot behavior)
-                return trap.hasAttribute('data-triggered');
+                return !passed;
             },
             
             // Mouse movement analysis (bots often don't move mouse)
@@ -296,7 +229,7 @@
                     
                     setTimeout(() => {
                         resolve(!moved);
-                    }, 1000);
+                    }, 500); // Reduced time for faster detection
                 });
             },
             
@@ -322,7 +255,7 @@
                 botDetector.lacksAdvancedFeatures(),
                 botDetector.checkHoneypot(),
                 botDetector.checkIframeBehavior(),
-                botDetector.checkCSSTrap(),
+                botDetector.checkJSChallenge(),
                 botDetector.checkPerformance()
             ];
             
@@ -343,7 +276,7 @@
             document.getElementById('statusVerifying').classList.remove('hidden');
             
             // Wait a bit to simulate verification process
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            await new Promise(resolve => setTimeout(resolve, 800));
             
             // Run bot detection
             const isBot = await detectBot();
@@ -365,7 +298,7 @@
                 
                 setTimeout(() => {
                     window.location.href = TARGET_URL;
-                }, 1000);
+                }, 500);
             }
         });
         
